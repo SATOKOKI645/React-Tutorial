@@ -16,15 +16,31 @@ const Task = () => {
 	const addHandler = () => {
 		// タスクを追加する
 		const name = todoNameRef.current.value;
+		const comma = ",";
 
 		// もしnameが空の場合リターン
 		if (name === "") {
 			return;
 		}
 
-		setTodos((prevTodos) => {
-			return [...prevTodos, { id: uuidv4(), name: name, completed: false }];
-		});
+		// タスクの追加処理
+		// ただしカンマ区切りだった時タスクを分割して追加する
+		if (name.indexOf(comma)) {
+			let taskArray = name.split(",");
+			for (let i = 0; i < taskArray.length; i++) {
+				console.log(taskArray[i]);
+				setTodos((prevTodos) => {
+					return [
+						...prevTodos,
+						{ id: uuidv4(), name: taskArray[i], completed: false },
+					];
+				});
+			}
+		} else {
+			setTodos((prevTodos) => {
+				return [...prevTodos, { id: uuidv4(), name: name, completed: false }];
+			});
+		}
 	};
 
 	// checkboxのトグルの状態を変える関数
